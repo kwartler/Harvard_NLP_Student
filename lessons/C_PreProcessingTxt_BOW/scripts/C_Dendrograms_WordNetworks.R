@@ -14,7 +14,7 @@ library(tm)
 library(qdap)
 library(ggplot2)
 library(ggthemes)
-#library(ggdendrogram)
+library(ggdendro)
 
 # Options & Functions
 options(stringsAsFactors = FALSE)
@@ -60,7 +60,8 @@ reducedTDM <- as.data.frame(as.matrix(reducedTDM))
 hc <- hclust(dist(reducedTDM))
 plot(hc,yaxt='n')
 
-#ggdendrogram(hc, rotate=FALSE); unable to load bc package is not updated
+#GG plot version
+ggdendrogram(hc, rotate = FALSE, size = 2) 
 
 ############ Back to PPT
 
