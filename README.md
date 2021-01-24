@@ -34,4 +34,16 @@ install.packages("~/Downloads/openNLPmodels.en_1.5-1.tar.gz", repos = NULL, type
 
 ```
 
+## Installing rJava (needed for Qdap) on Mac
+For most students these three links have helped them install java, and then make sure R/Rstudio can find it when loading qdap.  **Keep in mind, you don't have to install qdap, to earn a good grade** This is more for use of some functions and the `polarity()` function primarily.
+
+* [link1](https://zhiyzuo.github.io/installation-rJava/)
+* [link2](https://stackoverflow.com/questions/63830621/installing-rjava-on-macos-catalina-10-15-6)
+* [link3](https://fahadusman.com/setup-rjava-on-mac-and-start-using-opennlp/)
+
+Once java is installed this command *from terminal* often resolves the issue:
+```
+sudo R CMD javareconf
+```
+
 

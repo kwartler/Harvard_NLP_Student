@@ -1,0 +1,141 @@
+# Object classes
+# Jan 21
+# TK
+
+#numeric
+x<- 1
+is.numeric(x)
+is.integer(x)
+
+y <- 326L
+is.numeric(y)
+is.integer(y)
+
+
+# Classes
+class(x * y)
+
+# Factors
+x <- as.factor(letters[1:3])
+class(x)
+
+# Strings
+x <- 'some text that we have'
+class(x)
+nchar(x)
+nchar(y) #Coercion
+
+# Dates
+x <- Sys.Date()
+y <- x-7
+difftime(x,  y, units = 'mins') #?difftime
+
+library(lubridate)
+year(x)
+month(x)
+day(x)
+weekdays(x)
+
+# Logicals
+x <- TRUE
+y <- F
+class(x)
+class(y)
+
+347*x
+347*y
+
+# Vectors & Vector Operations
+x <- c(1,2,3,4,5)
+y <- c(6:10)
+length(x)
+class(x)
+class(y)
+
+x*y
+x+1
+x^2
+sqrt(x)
+
+# Char Vectors
+x <- c(letters[1:10])
+x
+nchar(x)
+
+# Logical Operators
+x <- 1
+y <- 2
+x>y
+x>=1
+x<y
+
+x <- c(1,2,3,4,5)
+y <- c(1:3,6,7)
+x>y
+x<y
+
+# Missing data
+x <- c(1,NA,3,4,5)
+x
+is.na(x)
+
+y <- c(1,NULL,3,4,5)
+y
+
+# is.null doesn't work on vectors since null is not within a vector, see y above
+is.null(NULL)
+is.null(3)
+
+### Lists
+x <- list(1, 2, 3)
+x
+names(x)
+
+y <- list(first = c(1,2,3),
+          second = c(4,5,6),
+          third = c(7,8,9))
+y
+names(y)
+y$first
+
+z <- list(mtcars, mtcars, mtcars)
+z
+
+z2 <- list(mtcars, 1,c(1,2,3))
+z2
+
+lapply(z2, class)
+z2[[1]]
+z2[[2]]
+z2[[3]]
+
+# Apply family of functions
+
+x <- cbind(x1 = 3, x2 = c(4:1, 2:5))
+apply(x, 1, mean) # apply a function row wise
+apply(x, 2, mean) # apply a function column wise
+
+# When you have a list object; apply to each element
+# lapply returns a list
+lapply(z, summary)
+lapply(z, function(x){mean(x[,1])}) # avg of the first column with a custom function
+
+# sapply will return a vector
+sapply(z, function(x){mean(x[,1])}) 
+
+
+# Now let's do something more appropriate for text files
+tmp <- list.files(path = '~/Desktop/Harvard_NLP_Student/cases/NBA Fan Engagement/data', pattern = '*.csv', full.names = T)
+
+allFiles <- lapply(tmp, read.csv)
+allFileDims <- lapply(allFiles, dim) #returns a list
+allFileDims
+
+# Lets arrnge to make it easier
+allFileDims <- do.call(rbind, allFileDims)
+allFileDims
+
+# Total tweets
+sum(allFileDims[,1])
+
+# End
