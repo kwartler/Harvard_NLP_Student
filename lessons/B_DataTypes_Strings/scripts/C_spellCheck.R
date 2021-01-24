@@ -1,17 +1,17 @@
 #' Title: Spell Check Examples
 #' Purpose: Run through basic spell checking of text
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
 #' License: GPL>=3
 #' Date: Dec 30 2020
 #'
 
 # Libs
-#library(qdap) #pg 45 in book has another option but crashes rstudio free cloud instances
+library(qdap) #pg 45 in book has another option but crashes rstudio free cloud instances
 library(spelling)
 library(hunspell)
 library(mgsub)
 library(pbapply)
+library(dplyr)
 
 # List available dictionaries; not great
 # https://cloud.r-project.org/web/packages/hunspell/vignettes/intro.html#hunspell_dictionaries
@@ -66,4 +66,32 @@ correctedTxt
 correctedTxt2 <- pblapply(allTxt, mgsub, correctionLexicon$wrong, correctionLexicon$right)
 correctedTxt2 <- do.call(rbind, correctedTxt2)
 correctedTxt2
+
+# Or use qdap
+x <- "Robots are evl creatres and deserv exterimanitation."
+which_misspelled(x, suggest=FALSE)
+which_misspelled(x, suggest=TRUE)
+check_spelling(DATA$state)
+check_spelling(x)
+
+# There may be a better way but this is one method to auto correct
+allTxt <- c(allTxt, x)
+allTxt
+
+
+correctedTxt <- vector()
+for(i in 1:length(allTxt)){
+  print(i)
+  txtString <- allTxt[i]
+  tokens <- which_misspelled(txtString, suggest = T)[,1:3]
+  tmp    <- strsplit(txtString, ' ')[[1]]
+  tmp    <- data.frame(idx = as.character(1:length(tmp)),
+                       word = tmp)
+  tmp    <- left_join(tmp, tokens, by = c('idx'='word.no'))
+  corrected <- ifelse(is.na(tmp$not.found),tmp$word, tmp$suggestion)
+  corrected <- paste(corrected, collapse = ' ')
+  correctedTxt[i] <- corrected
+}
+correctedTxt
+
 # End

@@ -1,13 +1,12 @@
 #' Title: R Sting Basics Stringi & Stringr
 #' Purpose: Explore a bunch of functions from the most common string manipulations packages
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
 #' License: GPL>=3
 #' Date: Dec 30 2020
 #' 
 
 # Wd
-setwd("~/Desktop/hult_NLP_student/lessons/class2/data")
+setwd("~/Desktop/Harvard_NLP_Student/lessons/B_DataTypes_Strings/data")
 
 # library
 library(stringi)
