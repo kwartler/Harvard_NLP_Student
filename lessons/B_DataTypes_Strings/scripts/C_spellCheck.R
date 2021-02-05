@@ -84,7 +84,7 @@ for(i in 1:length(allTxt)){
   print(i)
   txtString <- allTxt[i]
   tokens <- which_misspelled(txtString, suggest = T)[,1:3]
-  tmp    <- strsplit(txtString, ' ')[[1]]
+  tmp    <- strsplit(txtString, ' ')[[1]] #split individual words
   tmp    <- data.frame(idx = as.character(1:length(tmp)),
                        word = tmp)
   tmp    <- left_join(tmp, tokens, by = c('idx'='word.no'))

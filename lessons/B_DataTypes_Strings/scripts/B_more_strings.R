@@ -64,6 +64,7 @@ stri_count(allText, fixed="is")
 str_split(allText, " ") # result is a list!
 
 # Now lets say we have messy text from an API or scraped where column 1 is and ID and column 2 is text
+# Similar real table here: https://www.imdb.com/title/tt0058331/
 messyTxt <- c('123...this is text to be examined',
               '234...this is more text to be examined',
               '345...this is yet more text for analysis')
