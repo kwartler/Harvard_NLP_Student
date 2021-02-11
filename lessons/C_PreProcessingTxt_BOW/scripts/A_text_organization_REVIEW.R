@@ -54,38 +54,52 @@ txtCorpus[[4]]
 meta(txtCorpus[4])
 content(txtCorpus[[4]])
 
-# Need to plain text cleaned copy?r
+# Need a plain text cleaned copy?
 df <- data.frame(text = unlist(sapply(txtCorpus, `[`, "content")),
                  stringsAsFactors=F)
 #write.csv(df,'plain_coffee.csv',row.names = F)
 
+# Or
+df2 <- lapply(txtCorpus, content)
+
 # Compare a single tweet
 text$text[4]
 df[4,]
+df2[[4]] #still a list if needed
 
-# Make a Document Term Matrix or Term Document Matrix depending on analysis
+# Make a Document Term Matrix 
 txtDtm  <- DocumentTermMatrix(txtCorpus)
-txtTdm  <- TermDocumentMatrix(txtCorpus)
 txtDtmM <- as.matrix(txtDtm)
-txtTdmM <- as.matrix(txtTdm)
 
-# Examine
+# Examine DTM
 txtDtmM[610:611,491:493]
-txtTdmM[491:493,610:611]
 
 # Get the most frequent terms
 topTermsA <- colSums(txtDtmM)
-topTermsB <- rowSums(txtTdmM)
 
 # Add the terms
 topTermsA <- data.frame(terms = colnames(txtDtmM), freq = topTermsA)
-topTermsB <- data.frame(terms = rownames(txtTdmM), freq = topTermsB)
 
 # Remove row attributes
 rownames(topTermsA) <- NULL
+
+######## OR Term Document Matrix depending on analysis
+txtTdm  <- TermDocumentMatrix(txtCorpus)
+txtTdmM <- as.matrix(txtTdm)
+
+# Examine TDM
+txtTdmM[491:493,610:611]
+
+# Get the most frequent terms
+topTermsB <- rowSums(txtTdmM)
+
+# Add the terms
+topTermsB <- data.frame(terms = rownames(txtTdmM), freq = topTermsB)
+
+# Remove row attributes
 rownames(topTermsB) <- NULL
 
-# Review
+# Review, THEY ARE THE SAME!
 head(topTermsA)
 head(topTermsB)
 

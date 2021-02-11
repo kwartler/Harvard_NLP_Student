@@ -94,6 +94,6 @@ assocDF
 ggplot(assocDF, aes(y=terms)) +
   geom_point(aes(x=value), data=assocDF, col='#c00c00') +
   theme_gdocs() + 
-  geom_text(aes(x=value,label=value), colour="red",hjust="inward", vjust ="inward" , size=3) 
+  geom_text(aes(x=value,label=value), colour="red",hjust="inward", vjust ="inward" , size=4) 
 
 # End
