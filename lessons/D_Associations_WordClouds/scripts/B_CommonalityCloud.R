@@ -75,7 +75,7 @@ colnames(drinkTDMm) <- c(filesNames[1], filesNames[2])
 # Examine
 head(drinkTDMm)
 
-
+set.seed(123)
 commonality.cloud(drinkTDMm, 
                   max.words=150, 
                   random.order=FALSE,
