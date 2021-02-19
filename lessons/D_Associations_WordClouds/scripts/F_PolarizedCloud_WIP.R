@@ -45,9 +45,9 @@ retailDF      <- subset(retailDF, retailDF[,1]>0 & retailDF[,2]>0) #in case stop
 retailDF$diff <- retailDF[,1]-retailDF[,2]
 
 # Words used more by Carrefour
-carrefourDF <- subset(retailDF, diff > 0) # Said more  by carre
+carrefourDF <- subset(retailDF, retailDF$diff > 0) # Said more  by carre
 # Words used more by Tesco
-tescoDF     <- subset(retailDF, diff < 0) # Said more by tesco
+tescoDF     <- subset(retailDF, retailDF$diff < 0) # Said more by tesco
 
 # Calc how the much the term contributes to the specific corpus 
 carrefourDF$density <- carrefourDF$carrefour.csv/carreCount

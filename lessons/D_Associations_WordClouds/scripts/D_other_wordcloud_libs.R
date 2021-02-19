@@ -42,7 +42,7 @@ stops <- c(stopwords('SMART'), 'airplane', 'british', 'ryan', 'air', 'ryanair', 
 text <- read.csv('RyanAir.csv')$text
 text <- iconv(text, "latin1", "ASCII", sub="")
 
-# Quick remove html
+# Quick remove special characters
 text <- gsub("\u00A0", "", text)
 
 # Make a volatile corpus

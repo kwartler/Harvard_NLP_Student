@@ -36,13 +36,13 @@ for(i in 1:length(allSongs)){
 songLength <- unlist(lastLines)
 
 # Examine
-max(allSongs[[1]]$endTime) #181762
+max(allSongs[[1]]$endTime) #222197
 songLength[1] 
 
 
 # Make it a named vector
 names(songLength) <- names(allSongs)
-barplot(sort(songLength, decreasing = T), las = 2)
+barplot(sort(songLength, decreasing = T), las = 2, main= 'song length in ms')
 
 ## Avg words in song
 singleWords <- list()
@@ -50,14 +50,14 @@ for(i in 1:length(allSongs)){
   print(names(allSongs)[i])
   x <- sapply(strsplit(allSongs[[i]][,3], " "), length)
   singleWords[[i]] <- data.frame(song = names(allSongs)[i],
-                                 totalWords  = length(unlist(x)))
+                                 totalWords  = sum(unlist(x)))
 }
 singleWords <- do.call(rbind, singleWords)
 head(singleWords)
 
 # Make it a named vector
 singleWords <- singleWords[order(singleWords$totalWords, decreasing = T),]
-barplot(singleWords$totalWords, names.arg = singleWords$song, las = 2)
+barplot(singleWords$totalWords, names.arg = singleWords$song, las = 2, main = 'song length in words')
 
 # Relationship songLentgh*totalwords
 plot(songLength, singleWords$totalWords)
