@@ -107,6 +107,11 @@ emos %>%
 
 # Other Emotion Lexicons Exist
 emotionLex <- affect_wordnet
+emotionLex
+table(emotionLex$emotion)
+
+emotionLex <- subset(emotionLex, 
+                     emotionLex$emotion=='Positive'|emotionLex$emotion=='Negative')
 
 # More emotional categories, fewer terms
 lexSent <- inner_join(tidyCorp,emotionLex, by=c('term' = 'term'))
@@ -115,7 +120,7 @@ emotionID <- aggregate(count ~ category, lexSent, sum)
 emotionID %>% 
   e_charts(category) %>% e_theme("dark-mushroom") %>%
   e_radar(count, max =max(emotionID$count), name = "emotions") %>%
-  e_tooltip(trigger = "item") %>%
+  e_tooltip() %>%
   e_theme("dark-mushroom") 
 
 # End
