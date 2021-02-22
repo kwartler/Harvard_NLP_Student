@@ -1,4 +1,4 @@
-#' Politness Example
+#' Politeness Example
 #' Jan 29 2021
 #' 
 # https://cran.r-project.org/web/packages/politeness/vignettes/politeness.html
@@ -34,15 +34,18 @@ project           <- politenessProjection(df_polite_train,
                                           df_polite_holdout)
 
 
-
+# Using the model's identified terms, score new text for most/least polite
+# Text to be scores, the terms from the model, outcome label "warm" or "tough"
 fpt_most          <- findPoliteTexts(phone_offers$message,
                                      df_polite_train,
                                      phone_offers$condition,
                                      type="most")
+fpt_most[1]
 fpt_least        <- findPoliteTexts(phone_offers$message,
                                     df_polite_train,
                                     phone_offers$condition,
                                     type="least")
+fpt_least[1]
 
 
 # End
