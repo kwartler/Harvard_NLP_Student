@@ -31,7 +31,7 @@ class(unicorns$created_at)
 min(unicorns$created_at)
 max(unicorns$created_at)
 
-# To make it more interesting let's make it a bunch of rando dates
+# To make it more interesting let's make it a bunch of random dates
 unicorns$fakeDate <- sample(seq(as.Date("2021/01/01"), 
                                 as.Date("2021/02/02"), by = "day"), nrow(unicorns), replace = T)
 

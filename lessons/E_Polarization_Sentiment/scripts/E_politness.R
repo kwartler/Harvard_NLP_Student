@@ -35,7 +35,7 @@ project           <- politenessProjection(df_polite_train,
 
 
 # Using the model's identified terms, score new text for most/least polite
-# Text to be scores, the terms from the model, outcome label "warm" or "tough"
+# Text to be scored, the terms from the model, outcome label "warm" or "tough"
 fpt_most          <- findPoliteTexts(phone_offers$message,
                                      df_polite_train,
                                      phone_offers$condition,

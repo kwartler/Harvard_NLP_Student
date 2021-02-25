@@ -27,6 +27,10 @@ stops <- c(stopwords('english'))
 
 # Clean and Organize the old way instead of cleanMatrix
 txt <- read.csv('news.csv')
+table(txt$doc_id) #565 news articles mentining President Trump
+
+
+# Ignoring authorship/news politcal leanings, overall let's examine the emotional words used in these articles
 txtDTM <- VCorpus(VectorSource(txt$text))
 txtDTM <- cleanCorpus(txtDTM, stops)
 txtDTM <- DocumentTermMatrix(txtDTM)
@@ -68,18 +72,23 @@ head(afinn)
 afinnSent <- inner_join(tidyCorp,afinn, by=c('term' = 'word'))
 afinnSent
 
-# if the documents were related and temporal, make sure they are sorted by time first!
-# Example use case : i.e. over time the topic Pakistan was covered in the Guardian paper
+# Examine the quantity
 afinnSent$afinnAmt     <- afinnSent$count * afinnSent$value
-afinnTemporal          <- aggregate(afinnAmt~document, afinnSent, sum)
-afinnTemporal$document <- as.numeric(afinnTemporal$document)
-afinnTemporal          <- afinnTemporal[order(afinnTemporal$document),]
 
 # Compare w/polarity and bing
 mean(afinnTemporal$afinnAmt)
 
+# FAKE EXAMPLE: if the documents were related and temporal, make sure they are sorted by time first!
+# Example use case : i.e. over time how was the emotional content for a topic i.e. Pakistan articles
+afinnTemporal          <- aggregate(afinnAmt~document, afinnSent, sum)
+afinnTemporal$document <- as.numeric(afinnTemporal$document)
+afinnTemporal          <- afinnTemporal[order(afinnTemporal$document),]
+
 # Quick plot
 plot(afinnTemporal$afinnAmt, type="l", main="Quick Timeline of Identified Words") 
+
+
+# Quick Check with the pptx for a reminder.
 
 # Get nrc lexicon; deprecated in tidytext, use library(lexicon)
 #nrc <- read.csv('nrcSentimentLexicon.csv')
@@ -102,13 +111,14 @@ emos <- data.frame(table(nrcSent$emotion))
 names(emos) <- c('emotion', 'termsCt')
 emos %>% 
   e_charts(emotion) %>% 
-  e_radar(termsCt, max = max(emos$termsCt), name = "Guardian News Pakistan Articles") %>%
+  e_radar(termsCt, max = max(emos$termsCt), name = "President Trump 565 Articles Emotions") %>%
   e_tooltip(trigger = "item") %>% e_theme("dark-mushroom")
 
 # Other Emotion Lexicons Exist
 emotionLex <- affect_wordnet
 emotionLex
 table(emotionLex$emotion)
+table(emotionLex$category)
 
 emotionLex <- subset(emotionLex, 
                      emotionLex$emotion=='Positive'|emotionLex$emotion=='Negative')
@@ -119,7 +129,7 @@ lexSent
 emotionID <- aggregate(count ~ category, lexSent, sum)
 emotionID %>% 
   e_charts(category) %>% e_theme("dark-mushroom") %>%
-  e_radar(count, max =max(emotionID$count), name = "emotions") %>%
+  e_radar(count, max =max(emotionID$count), name = "President Trump 565 Articles Emotional Categories") %>%
   e_tooltip() %>%
   e_theme("dark-mushroom") 
 

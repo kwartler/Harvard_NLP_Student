@@ -13,9 +13,13 @@ library(mgsub)
 
 head(emojis)
 emojis$code[2]
+tail(emojis)
+nrow(emojis)
 
+# Read in some data
+unicorns <- readRDS('unicorns.rds')
 
-# Ignor the Japanese
+# Ignore the Japanese
 unicorns$text[c(720, 829)]
 # https://twitter.com/massafrancis/status/1363660144379273216
 
@@ -26,8 +30,13 @@ grep(emojis$code[2], unicorns$text)
 # Yes I had to look that up :)
 gsub("[^\x01-\x7F]", "", unicorns$text[c(720, 829)])
 
-# 1A Remove: Or with qdapRegex, removes emoji's only.  Speacial characters remain
-rm_emoticon(unicorns$text[c(720, 829)])
+# 1A Remove: qdapRegex, removes text based emoticons only!  Special characters remain
+data(emoticon)
+x <- c("are :-)) it 8-D he XD on =-D they :D of :-) is :> for :o) that :-/",
+       "as :-D I xD with :^) a =D to =) the 8D and :3 in =3 you 8) his B^D was")
+
+rm_emoticon(x)
+ex_emoticon(x)
 
 # Remove all
 st <- Sys.time()
