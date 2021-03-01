@@ -8,8 +8,11 @@
 
 # Wd
 setwd("~/Desktop/Harvard_NLP_Student/lessons/E_Polarization_Sentiment/data")
+library(tm) # displays the emojis correctly?  Odd.
 library(rtweet) # Get the emoji lexicon or load one manually
-library(mgsub)
+library(mgsub) #used for substitutions
+library(qdap) #emoticons functions
+library(textclean) #another one!
 
 head(emojis)
 emojis$code[2]
@@ -44,20 +47,21 @@ rmTxt <- gsub("[^\x01-\x7F]", "", unicorns$text)
 Sys.time() - st #0.01secs for 1k tweets
 rmTxt[c(720, 829)]  
 
-
 # 2. Substitute them with the lexicon
 # Remember mgsub library is text, pattern then replacement!
 mgsub(unicorns$text[c(720, 829)], emojis$code, emojis$description)
 
-# Sub all
-st <- Sys.time()
-subTxt <- mgsub(unicorns$text, emojis$code, emojis$description)
-Sys.time() - st #43secs 1k tweets
-subTxt[c(720, 829)]  
-
 # Since emojis are often without spaces:
+st <- Sys.time()
 subTxt <- mgsub(unicorns$text, emojis$code, paste0(' ', emojis$description,' '))
+Sys.time() - st #10x longer for 1000 tweets, imagine more!
 subTxt[c(720, 829)] 
+
+# Converts to ASCII so not always helpful
+textclean::replace_emoji(unicorns$text[829])
+
+unicorns$text[9]
+textclean::replace_emoji(unicorns$text[9])
 
 # End
 

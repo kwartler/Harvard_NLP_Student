@@ -76,7 +76,7 @@ afinnSent
 afinnSent$afinnAmt     <- afinnSent$count * afinnSent$value
 
 # Compare w/polarity and bing
-mean(afinnTemporal$afinnAmt)
+mean(afinnSent$afinnAmt)
 
 # FAKE EXAMPLE: if the documents were related and temporal, make sure they are sorted by time first!
 # Example use case : i.e. over time how was the emotional content for a topic i.e. Pakistan articles

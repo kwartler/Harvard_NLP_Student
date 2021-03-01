@@ -3,7 +3,7 @@
 #' Author: Ted Kwartler
 #' email: edwardkwartler@fas.harvard.edu
 #' License: GPL>=3
-#' Date: Feb 20, 2021
+#' Date: Feb 28, 2021
 #'
 
 # Wd
@@ -20,13 +20,14 @@ text <- readLines('pharrell_williams_happy.txt')
 polarity(text)
 
 # Does it Matter if we process it?
-source('~/Desktop/Harvard_NLP_Student/lessons/Z_otherScripts/ZZZ_supportingFunctions.R')
+source('~/Desktop/hult_NLP_student/lessons/Z_otherScripts/ZZZ_supportingFunctions.R')
+
 txt <- VCorpus(VectorSource(text))
 txt <- cleanCorpus(txt, stopwords("SMART"))
-polarity(txt)
+polarity(content(txt[[1]]))
 
 # Examine the polarity obj more
-pol <- polarity(txt)
+pol <- polarity(content(txt[[1]]))
 
 # Word count detail
 pol$all$wc
@@ -42,8 +43,6 @@ pol$all$neg.words
 
 # What are the doc words after polarity processing?
 pol$all$text.var[[1]]
-pol$all$text.var[[2]]
-pol$all$text.var[[3]]
 
 # Document View
 pol$group
