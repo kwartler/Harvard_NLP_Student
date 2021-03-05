@@ -116,12 +116,12 @@ for(i in 1:length(rawTxt)){
   rawTxt[[i]]$section <- 1:nrow((rawTxt[[i]]))
 }
 rawTxt <- do.call(rbind, rawTxt)
-#polTxt <- polarity(rawTxt$transcription, rawTxt$doc_id) #document level
+#polTxt <- polarity(rawTxt$transcription, rawTxt$section) #document level
 polTxt <- readRDS('polTxt.rds')
 
 
 # ID the top N locations
-topLocN <- 7
+topLocN <- 10
 allLocs <- as.matrix(table(locs$text))
 allLocs <- data.frame(locs = rownames(allLocs), 
                       ct = allLocs)
@@ -146,10 +146,10 @@ polTxtSubs <- polTxt$all #individual section polarity
 plotDF <- list()
 for(i in 1:length(chkLst)){
   x <- polTxtSubs[chkLst[[i]],1:3]
-  x <- x %>% group_by(doc_id) %>% 
+  x <- x %>% group_by(section) %>% 
     mutate(prop = prop.table(wc))
   y <- weighted.mean(x$polarity,x$prop)
-  wc <- aggregate(wc~doc_id, x, sum)
+  wc <- aggregate(wc~section, x, sum)
   plotDF[[chk[i]]] <- data.frame(loc = names(chkLst[i]),
                                   locPol = y, locWC = sum(wc))
   

@@ -128,3 +128,4 @@ subset(POSdf, POSdf$doc_id ==1 & grepl("*location", POSdf$features) == T)
 subset(POSdf, POSdf$doc_id ==7 & grepl("*organization", POSdf$features) == T)
 
 # End
+
