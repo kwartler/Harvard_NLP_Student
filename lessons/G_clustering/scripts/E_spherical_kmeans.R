@@ -13,6 +13,7 @@ library(tm)
 library(clue)
 library(cluster)
 library(wordcloud)
+library(fst)
 
 # This is an orphaned lib which gives us plotcluster:
 #https://www.rdocumentation.org/packages/fpc/versions/2.1-11.2
