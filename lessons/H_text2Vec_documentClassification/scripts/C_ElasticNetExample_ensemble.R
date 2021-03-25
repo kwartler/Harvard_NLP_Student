@@ -1,0 +1,155 @@
+#' Title: Elastic Net Example Ensemble 
+#' Purpose: Mix data types to improve a model
+#' Author: Ted Kwartler
+#' email: edward.kwartler@hult.edu
+#' License: GPL>=3
+#' Date: Dec 28 2020
+#'
+
+# Wd
+setwd("~/Desktop/Harvard_NLP_Student/lessons/H_text2Vec_documentClassification/data")
+
+# Libs
+library(text2vec)
+library(caret)
+library(tm)
+library(glmnet)
+library(pROC)
+
+
+# Custom cleaning function
+diagnosisClean<-function(xVec){
+  xVec <- removePunctuation(xVec)
+  xVec <- stripWhitespace(xVec)
+  xVec <- tolower(xVec)
+  return(xVec)
+}
+
+# Read
+diabetes <- read.csv('diabetes_subset_8500.csv')
+
+# Concantenate texts in 3 columns
+diabetes$diagnosisText <- as.character(paste(diabetes$diag_1_desc,
+                                         diabetes$diag_2_desc,
+                                         diabetes$diag_3_desc, sep=' '))
+
+### SAMPLE : Patritioning
+idx              <- createDataPartition(diabetes$readmitted,p=.7,list=F)
+trainDiabetesTxt <- diabetes[idx,]
+testDiabetesTxt  <- diabetes[-idx,]
+
+### EXPLORE
+head(trainDiabetesTxt$diagnosisText,2)
+
+table(trainDiabetesTxt$readmitted)
+
+### MODIFY
+trainDiabetesTxt$diagnosisText <- diagnosisClean(trainDiabetesTxt$diagnosisText)
+
+# Initial iterator to make vocabulary...Now with n-grams!
+iterMaker <- itoken(trainDiabetesTxt$diagnosisText, 
+                    progressbar         = T)
+textVocab <- create_vocabulary(iterMaker, 
+                               stopwords=stopwords('SMART'), 
+                               ngram = c(1,2))
+
+#prune vocab to make DTM smaller
+prunedtextVocab <- prune_vocabulary(textVocab,
+                                    term_count_min = 10,
+                                    doc_proportion_max = 0.5,
+                                    doc_proportion_min = 0.001)
+nrow(prunedtextVocab)
+
+# Using the pruned vocabulary to declare the DTM vectors 
+vectorizer <- vocab_vectorizer(prunedtextVocab)
+
+# Take the vocabulary lexicon and the pruned text function to make a DTM 
+diabetesDTM <- create_dtm(iterMaker, vectorizer)
+dim(diabetesDTM)
+
+# Default is TF but if you want TF-IDF
+#idf         <- get_idf(diabetesDTM)
+#diabetesDTM <- transform_tfidf(diabetesDTM,idf)
+
+### MODEL(s)
+#train text only model
+dim(diabetesDTM)
+textFit <- cv.glmnet(diabetesDTM,
+                     y=as.factor(trainDiabetesTxt$readmitted),
+                    alpha=0.9,
+                    family='binomial',
+                    type.measure='auc',
+                    nfolds=5,
+                    intercept=F)
+
+
+# Examine
+head(coefficients(textFit),10)
+
+# Fit without text
+noText    <- as.matrix(trainDiabetesTxt[,1:132])
+dim(noText)
+noTextFit <- cv.glmnet(noText,
+                       y=as.factor(trainDiabetesTxt$readmitted),
+                       alpha=0.9,
+                       family='binomial',
+                       type.measure='auc', 
+                       nfolds=5, 
+                       intercept=F)
+allDataModelingMatrix <- cbind(diabetesDTM, noText)
+dim(allDataModelingMatrix)
+allFit <- cv.glmnet(allDataModelingMatrix,
+                    y=as.factor(trainDiabetesTxt$readmitted),
+                    alpha=0.9,
+                    family='binomial',
+                    type.measure='auc',
+                    nfolds=5,
+                    intercept=F)
+### ANALYZE
+# Get Predictions on the training set from all 3 models
+textPreds   <-as.logical(predict(textFit,
+                                 diabetesDTM,
+                                 type = 'class',
+                                 s    = textFit$lambda.min))
+
+noTextPreds <- as.logical(predict(noTextFit,
+                                  noText,
+                                  type = 'class',
+                                  s    = noTextFit$lambda.min))
+
+allPreds    <- as.logical(predict(allFit,
+                                  allDataModelingMatrix,
+                                  type = 'class',
+                                  s    = allFit$lambda.min))
+
+# Get ROC info
+textROC   <- roc((trainDiabetesTxt$readmitted*1), textPreds*1)
+noTextROC <- roc((trainDiabetesTxt$readmitted*1), noTextPreds*1)
+allROC    <-roc((trainDiabetesTxt$readmitted*1), allPreds*1)
+
+plot(textROC,col="blue",main="BLUE = Text, RED = No Text, GREEN=All",adj=0)
+plot(noTextROC, add=TRUE,col="red", lty=2)
+plot(allROC,add=TRUE,col="darkgreen", lty=3)
+
+### Apply to new patients requires the construction of the new patient DTM exactly as the training set
+testIT   <- itoken(testDiabetesTxt$diagnosisText, 
+                   tokenizer = word_tokenizer)
+
+# Use the same vectorizer but with new iterator
+testDTM <-create_dtm(testIT,vectorizer)
+
+#Append the DTM to the test patient data
+newPatients <- cbind(testDTM, as.matrix(testDiabetesTxt[,1:132]))
+
+testPreds   <- predict(allFit,
+                       newPatients,
+                       type = 'class',
+                       s    = allFit$lambda.min) #cv$lambda.1se;lambda.min
+
+# Confusion Matrix
+(confMat <- table(testPreds, testDiabetesTxt$readmitted))
+
+# Accuracy
+sum(diag(confMat))/sum(confMat)
+
+#End
