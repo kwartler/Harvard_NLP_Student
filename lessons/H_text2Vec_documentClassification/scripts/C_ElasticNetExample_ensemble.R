@@ -1,7 +1,7 @@
 #' Title: Elastic Net Example Ensemble 
 #' Purpose: Mix data types to improve a model
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edwardkwartler@fas.harvard.edu
 #' License: GPL>=3
 #' Date: Dec 28 2020
 #'

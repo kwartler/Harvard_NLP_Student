@@ -1,7 +1,7 @@
 #' Title: A new way to make a DTM
 #' Purpose: Build an elastic net for classification 
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edwardkwartler@fas.harvard.edu
 #' License: GPL>=3
 #' Date: Dec 28 2020
 #'
