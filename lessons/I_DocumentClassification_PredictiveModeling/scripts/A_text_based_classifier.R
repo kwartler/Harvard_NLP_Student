@@ -15,6 +15,7 @@ library(MLmetrics)
 library(tm)
 library(glmnet)
 library(pROC)
+library(caret)
 
 # Custom cleaning function
 diagnosisClean<-function(xVec){
