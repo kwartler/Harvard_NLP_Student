@@ -10,7 +10,7 @@ library(pbapply)
 # Options
 options(stringsAsFactors = F)
 
-# www.newsapi.org Key
+# https://newsapi.org/ Key
 apiKey <- 'b6d9f96c78b34ee98bd84a23d3f74bfb'
 
 # Top headlines in the US endpoint:
