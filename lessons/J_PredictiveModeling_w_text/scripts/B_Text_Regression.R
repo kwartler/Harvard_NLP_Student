@@ -6,14 +6,13 @@
 #' Date: Apr 7, 2021
 #'
 # Wd
-setwd("~/Desktop/Harvard_NLP_Student/lessons/J_PredictiveModeling_ModelingEthicsBias/data")
+setwd("~/Desktop/Harvard_NLP_Student/lessons/J_PredictiveModeling_w_text/data")
 
 # Libs
 library(text2vec)
 library(MLmetrics)
 library(tm)
 library(glmnet)
-library(pROC)
 library(caret)
 library(tidyr)
 library(ggplot2)
@@ -36,7 +35,8 @@ diabetes$diagnosisText <- as.character(paste(diabetes$diag_1_desc,
                                              diabetes$diag_3_desc, sep=' '))
 
 ### SAMPLE : Patritioning
-idx              <- createDataPartition(diabetes$readmitted,p=.7,list=F)
+idx              <- createDataPartition(diabetes$readmitted,
+                                        p=.7,list=F)
 trainDiabetesTxt <- diabetes[idx,]
 testDiabetesTxt  <- diabetes[-idx,]
 
@@ -69,8 +69,8 @@ dim(diabetesDTM)
 
 ### MODEL(s)
 #train text only model
-textFit <- cv.glmnet(diabetesDTM,
-                     y=trainDiabetesTxt$number.diagnoses,
+textFit <- cv.glmnet(x = diabetesDTM,
+                     y = trainDiabetesTxt$number.diagnoses,
                      alpha=1,
                      family='gaussian',
                      type.measure='mse',
@@ -83,7 +83,8 @@ head(coefficients(textFit),10)
 # Subset to impacting terms
 bestTerms <- subset(as.matrix(coefficients(textFit)), 
                     as.matrix(coefficients(textFit)) !=0)
-bestTerms <- data.frame(term= rownames(bestTerms), value = bestTerms[,1])
+bestTerms <- data.frame(term= rownames(bestTerms), 
+                        value = bestTerms[,1])
 head(bestTerms[order(bestTerms$value, decreasing=T), ])
 tail(bestTerms[order(bestTerms$value, decreasing=T), ])
 nrow(bestTerms)
@@ -100,6 +101,7 @@ textPreds   <- predict(textFit,
 summary(textPreds)
 RMSE(textPreds,trainDiabetesTxt$number.diagnoses)
 MAE(textPreds,trainDiabetesTxt$number.diagnoses)
+MAPE(textPreds,trainDiabetesTxt$number.diagnoses)
 
 # Organize
 df <- data.frame(preds = textPreds[,1], 

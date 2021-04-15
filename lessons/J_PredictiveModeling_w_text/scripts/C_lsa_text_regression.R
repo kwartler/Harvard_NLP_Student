@@ -6,7 +6,7 @@
 #' Date: Apr 7, 2021
 #'
 # Wd
-setwd("~/Desktop/Harvard_NLP_Student/lessons/J_PredictiveModeling_ModelingEthicsBias/data")
+setwd("~/Desktop/Harvard_NLP_Student/lessons/J_PredictiveModeling_w_text/data")
 
 # Libs
 library(fst)
