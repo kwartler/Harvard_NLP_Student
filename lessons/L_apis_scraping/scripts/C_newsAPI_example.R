@@ -38,8 +38,11 @@ apiURL
 newsInfo <- fromJSON(apiURL)
 
 # Organize the API response and save
+newsInfo$status
 newsInfo$status           <- NULL
+newsInfo$totalResults 
 newsInfo$totalResults     <- NULL
+newsInfo$articles$source
 newsInfo$articles$source  <- NULL
 
 finalContent <- newsInfo[[1]]

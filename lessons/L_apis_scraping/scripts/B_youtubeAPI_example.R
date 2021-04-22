@@ -10,12 +10,9 @@ library(plyr)
 # Options; google api returns UTF-8 text
 Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
 
-# WD
-setwd("~/Desktop/Harvard_NLP_Student/lessons/K_Ethics_APIs/data")
-
 # Youtube URL
 #https://www.youtube.com/watch?v=Q-wRhzWaCac
-youtubeCaption <- 'https://www.youtube.com/api/timedtext?v=Q-wRhzWaCac&asr_langs=de%2Cen%2Ces%2Cfr%2Cit%2Cja%2Cko%2Cnl%2Cpt%2Cru&caps=asr&exp=xftt&xorp=true&xoaf=5&hl=en&ip=0.0.0.0&ipbits=0&expire=1618547816&sparams=ip%2Cipbits%2Cexpire%2Cv%2Casr_langs%2Ccaps%2Cexp%2Cxorp%2Cxoaf&signature=3A6D48B76EE40544EF4DC9BE3518C140CF746F3B.DA24B22B99D71D8CDB7082B0239F0C594A084139&key=yt8&kind=asr&lang=en&fmt=json3&xorb=2&xobt=3&xovt=3'
+youtubeCaption <- 'https://www.youtube.com/api/timedtext?v=Q-wRhzWaCac&asr_langs=de%2Cen%2Ces%2Cfr%2Cit%2Cja%2Cko%2Cnl%2Cpt%2Cru&caps=asr&exp=xftt&xorp=true&xoaf=5&hl=en&ip=0.0.0.0&ipbits=0&expire=1619081305&sparams=ip%2Cipbits%2Cexpire%2Cv%2Casr_langs%2Ccaps%2Cexp%2Cxorp%2Cxoaf&signature=61226B8D5CE5F164B80997C7A73B383D4C0C7CE9.1E185B3A87B35DCC04FE3F3454FBA8504F6C30C3&key=yt8&kind=asr&lang=en&fmt=json3&xorb=2&xobt=3&xovt=3'
 
 # Go get the data
 dat <- fromJSON(youtubeCaption)
@@ -49,6 +46,7 @@ rawTxt
 
 # If you want to retain the meta data
 timedTxt <- lapply(dat$events$segs, "[", 'utf8')
+timedTxt[[2]]
 
 allTxt <- list()
 for (i in 1:length(timedTxt)){

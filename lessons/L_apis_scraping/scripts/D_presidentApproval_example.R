@@ -1,5 +1,5 @@
 #' Author: Ted Kwartler
-#' Date: 11-30-2020
+#' Date: Apr 21-2021
 #' Purpose: Demonstrate getting json API information
 
 # Libraries
@@ -9,7 +9,7 @@ library(zoo)
 library(dygraphs)
 library(lubridate)
 
-# Original page
+# Original pages
 # https://projects.fivethirtyeight.com/trump-approval-ratings/
 # https://projects.fivethirtyeight.com/biden-approval-rating/adults/
 
