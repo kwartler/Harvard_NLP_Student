@@ -120,7 +120,7 @@ allInfo <- do.call(rbind, allInfo)
 
 if(fileFormat=='csv'){
   print('saving as csv')
-  nam <- paste0('PRs for ', searchQ, ' at ',Sys.time(),'.csv')
+  nam <- paste0('PRs for ', searchQ, ' at ',make.names(Sys.time()),'.csv')
   write.csv(allInfo, paste0(savePth, nam), row.names = F) 
 } else {
   print('saving as fst')
